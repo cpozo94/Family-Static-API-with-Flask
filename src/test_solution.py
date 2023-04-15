@@ -30,7 +30,7 @@ def test_add_implementation(client):
 		"age": 23,
 		"lucky_numbers": [34,65,23,4,6]
 	})
-    assert response.status_code == 200
+    assert response.status_code == 201
 
 @pytest.mark.it("Method POST /member should return something, NOT EMPTY")
 def test_add_empty_reponse_body(client):
