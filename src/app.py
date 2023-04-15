@@ -54,14 +54,15 @@ def create_member():
         raise APIException('Something went wrong!', status_code=400)
 
 
-@app.route('/members/<int:id>', methods=["DELETE"])
+@app.route('/member/<int:id>', methods=['DELETE'])
 def delete_member(id):
     member = jackson_family.delete_member(id)
-
-    if member:
-        return jsonify({"done": True, "message": "Member with ID: " + str(id) + " was successfully deleted"}), 200
-
-    return jsonify('bad request'), 404
+    if isinstance(member, dict):
+        # If the member was not found, return the response from the delete_member method
+        return jsonify(member), member["status_code"]
+    else:
+        # If the member was found, return a success message with a 200 status code
+        return jsonify({"done": True, "message": f"Member with ID {id} was successfully deleted"}), 200
 
 
 # this only runs if `$ python src/app.py` is executed
