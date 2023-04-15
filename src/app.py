@@ -1,12 +1,8 @@
-"""
-This module takes care of starting the API Server, Loading the DB and Adding the endpoints
-"""
 import os
 from flask import Flask, request, jsonify, url_for
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from datastructures import FamilyStructure
-#from models import Person
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -32,13 +28,11 @@ def get_all_members():
 
 
 @app.route('/member/<int:id>', methods=['GET'])
-def show_member(id):
+def get_member(id):
     member = jackson_family.get_member(id)
-    if member:
-        return jsonify(member), 200
-    else:
-        return jsonify("Member not found"), 404
-
+    if member is None:
+        raise APIException('Member not found', status_code=404)
+    return jsonify(member)
 
 
 @app.route('/member', methods=['POST'])
@@ -49,8 +43,8 @@ def create_member():
         member = {
             "first_name": request_json.get("first_name"),
             "last_name": "Jackson",
-            "id": request_json.get("id"), 
-            "age": request_json.get("age"), 
+            "id": request_json.get("id"),
+            "age": request_json.get("age"),
             "lucky_numbers": request_json.get("lucky_numbers")
         }
 
@@ -63,11 +57,12 @@ def create_member():
 @app.route('/members/<int:id>', methods=["DELETE"])
 def delete_member(id):
     member = jackson_family.delete_member(id)
-    
+
     if member:
         return jsonify({"done": True, "message": "Member with ID: " + str(id) + " was successfully deleted"}), 200
-    
+
     return jsonify('bad request'), 404
+
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
