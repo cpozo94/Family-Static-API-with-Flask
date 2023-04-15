@@ -60,8 +60,14 @@ class FamilyStructure:
     def get_member(self, id):
         for member in self._members:
             if member["id"] == id:
-                return member
-        return None
+                return {
+                    "first_name": member["first_name"],
+                    "id": member["id"],
+                    "age": member["age"],
+                    "lucky_numbers": member["lucky_numbers"]
+                }
+        return {"message": "Member not found"}
+
 
         
 
