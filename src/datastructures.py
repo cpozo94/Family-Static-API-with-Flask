@@ -34,7 +34,8 @@ class FamilyStructure:
                 "last_name": last_name,
                 "age": 5,
                 "lucky_numbers": [1]
-            }
+            },
+            
 
 
         ]

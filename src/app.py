@@ -31,7 +31,9 @@ def get_all_members():
 def get_member(id):
     member = jackson_family.get_member(id)
     if member is None:
-        raise APIException('Member not found', status_code=404)
+        raise APIException('Member not found', status_code=404, message={'message': 'Member not found'})
+
+
     return jsonify(member)
 
 
@@ -58,10 +60,8 @@ def create_member():
 def delete_member(id):
     member = jackson_family.delete_member(id)
     if isinstance(member, dict):
-        # If the member was not found, return the response from the delete_member method
         return jsonify(member), member["status_code"]
     else:
-        # If the member was found, return a success message with a 200 status code
         return jsonify({"done": True, "message": f"Member with ID {id} was successfully deleted"}), 200
 
 
